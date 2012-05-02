@@ -3,7 +3,9 @@ var express = require('express'),
 
 
 var main_server = express.createServer(),
-    domain = "graphdbg.com";
+    domain = process.argv[2];
+
+if (!domain) { console.log("need to pass in the domain \"node <domain>\""); return }
 
 
 var getvhost = function(dirname) {
@@ -13,7 +15,7 @@ var getvhost = function(dirname) {
 fs.readdir(__dirname + '/vhosts', function(err, files) {
   if (err) { return err; }
   for (var i in files) {
-    console.log("adding "+files[i]);
+    console.log("adding "+getvhost(files[i]));
     main_server.use(
       express.vhost(
         getvhost(files[i]), require(__dirname + "/vhosts/" + files[i] ).app
